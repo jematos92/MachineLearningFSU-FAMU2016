@@ -1,13 +1,14 @@
 %% Training: Read Data
 clear all;
 close all;
+
 fid = fopen('train.dat', 'r');
-nclases = 26;
-npixels = 25;
-a= fscanf(fid, '%d',[51, 260]); % in this case the form of the target is changed as a vector
+a= fscanf(fid, '%d',[51, 260]); 
 inputs=a';
 
-ninputs = size(inputs,1);
+nclases = 26;               % the 26 letters of the alphabet
+npixels = 25;               % the 25 pixels in each image
+ninputs = size(inputs,1);   % size of the sample
 
 xTrain=inputs(:,1:npixels);
 xTrain = [ones(ninputs,1) xTrain]; %Add Extra input to account for Biases
@@ -26,10 +27,11 @@ suptitle('Sample Training Data')
 
 %% Training: Initialize the weights and constants
 weights = (randn(nclases,1+npixels)-randn(nclases,1+npixels))/nclases; % weights is matrix form because we need 11-training weghts
-alpha =0.005;   % learning rate
-epoch =1;       %variable to trak epoks
-sum_square_error = 1+npixels;
+alpha =0.005;   % learning rate constant
 
+%index variables:
+epoch =1;       
+sum_square_error = 1;
 %% Training: perform training and Plot error
 error = zeros(ninputs,nclases);
 while sum_square_error > 0 % I used same contion here.
@@ -49,7 +51,8 @@ while sum_square_error > 0 % I used same contion here.
      errorTrain = yTrain-currentoutput;
      error_square = errorTrain.^2;
      sum_square_error = sum(sum(error_square))/ninputs;
-     sum_square_error_hist(epoch) = sum_square_error;     
+     sum_square_error_hist(epoch) = sum_square_error;   
+     
      %% Update Weights using Generalized Delta Rule(batch training)
      for j=1:nclases
           for k = 1:npixels                                                              
@@ -78,17 +81,16 @@ xTest = [ones(ninputs,1) xTest];%Add Extra input to account for Biases
 
 %add some noise by changing random bits in the training set
 nbitsChanged = 100;
-[m,n] = size(xTest);       % Just to be general...
+[m,n] = size(xTest);      
 idx = randi([1 ninputs*npixels],1,nbitsChanged);
 xTest(idx) = ~xTest(idx);
 
 yTest=inputs(:,npixels+1:end);
 testingoutput = zeros(ninputs,nclases);
 
-
+%% Run the testing data through the network
 for i=1:ninputs
   for k=1:nclases
-       % calculate current network output for each class               
         if dot(xTest(i,:),weights(k,:)) > 0
             testingoutput(i,k) = 1;
         else
@@ -97,6 +99,7 @@ for i=1:ninputs
   end
 end
 
+%% Calculate Testing Error
 errorTest = yTest-testingoutput;
 error_squareTest = errorTest.^2;
 sum_square_errorTest = double(sum(sum(error_squareTest)))/double(ninputs)
