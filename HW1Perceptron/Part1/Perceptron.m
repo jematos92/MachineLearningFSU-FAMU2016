@@ -1,6 +1,8 @@
 %% Training: Read Data
 clear all;
 close all;
+%TUNNABLE PARAMS:
+alpha =0.05;   % learning rate constant
 
 fid = fopen('train.dat', 'r');
 a= fscanf(fid, '%d',[51, 260]); 
@@ -27,7 +29,6 @@ suptitle('Sample Training Data')
 
 %% Training: Initialize the weights and constants
 weights = (randn(nclases,1+npixels)-randn(nclases,1+npixels))/nclases; % weights is matrix form because we need 11-training weghts
-alpha =0.005;   % learning rate constant
 
 %index variables:
 epoch =1;       

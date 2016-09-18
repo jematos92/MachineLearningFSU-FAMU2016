@@ -4,7 +4,6 @@ clear all;
 
 %Load the Iris_dataset implemented natively into matlab
 [x,t] = iris_dataset;
-
 %% Plot the Data set:
 targets = zeros(size(t,2),1);
 for i = 1:size(t,2)
@@ -20,7 +19,7 @@ subplot(2,3,5), gscatter(x(2,:),x(4,:),targets), xlabel('Sepal width in cm'); yl
 subplot(2,3,6), gscatter(x(3,:),x(4,:),targets), xlabel('Petal length in cm'); ylabel('Petal width in cm');
 suptitle('The Iris Dataset')
 
-%% Netwok Training
+
 %Create a feedforward NN that uses Gradient Descent
 net = feedforwardnet();
 %Do not open the train window
@@ -28,7 +27,6 @@ net.trainParam.showWindow = false;
 %Train the neural network
 [net,tr] = train(net,x,t);
 % Plot Performance
-figure
 plotperform(tr)
 
 
