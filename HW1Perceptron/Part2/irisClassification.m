@@ -23,8 +23,6 @@ suptitle('The Iris Dataset')
 %% Netwok Training
 %Create a feedforward NN that uses Gradient Descent
 net = feedforwardnet();
-%Do not open the train window
-net.trainParam.showWindow = false;
 %Train the neural network
 [net,tr] = train(net,x,t);
 % Plot Performance
